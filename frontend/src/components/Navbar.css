@@ -1,0 +1,51 @@
+/* Navbar.css */
+.navbar {
+  width: 90%;
+  margin: 20px auto;
+  padding: 10px 30px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  flex-wrap: wrap;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+  color: #4caf50;
+  margin-right: 10px;
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.navbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.navbar-right .nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-right .nav-link:hover {
+  color: #4caf50;
+  text-shadow: 0 0 5px #4caf50;
+}

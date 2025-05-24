@@ -1,0 +1,38 @@
+/* Basic styles for the alerts */
+.alert {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 300px; /* Fixed width for each alert */
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+/* Style for warning alerts */
+.alert.warning {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Style for info alerts */
+.alert.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* Flex container for the alerts */
+.alert-list {
+  display: flex;              /* Align alerts in a row */
+  flex-wrap: wrap;             /* Wrap the alerts if the row overflows */
+  justify-content: flex-start; /* Align items to the start of the container */
+  gap: 15px;                  /* Space between the alerts */
+  padding: 0;
+  margin: 0;
+  list-style-type: none;      /* Remove bullet points */
+}
+
+/* Each alert will be wrapped in a flex container */
+.alert-list .alert {
+  flex: 0 1 300px;  /* Flexbox to allow wrapping of alerts and limit width */
+  min-width: 300px; /* Ensure each alert takes at least 300px of space */
+}
