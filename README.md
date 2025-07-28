@@ -32,6 +32,17 @@ The **Smart Plant Monitoring System** is a MERN stack web application designed t
 | **CSS** | Styling (Glassmorphism with background images) |
 
 ---
+## 📸 Screenshots
+
+![Dashboard](Screenshot%20(138).png)  
+*Plant Dashboard*
+
+![Real-time Monitor](Screenshot%20(139).png)  
+*Real-time Monitoring*
+
+![Glassmorphic UI](Screenshot%20(144).png)  
+*Login / Register with Glassmorphism*
+
 
 ## 🔧 Installation
 
