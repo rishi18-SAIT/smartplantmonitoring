@@ -1,6 +1,7 @@
 # 🌿 Smart Plant Monitoring System
 
-The **Smart Plant Monitoring System** is a MERN stack web application designed to help users monitor and manage their plants effectively. It provides real-time updates, plant health monitoring, and alert features to ensure optimal care of your green companions.
+The **Smart Plant Monitoring System** is a MERN stack web application designed to help users monitor and manage their plants effectively with enhanced ai features 
+It helps users monitor and manage plants in real time, receive alerts, and detect plant diseases from leaf images.
 
 ---
 
@@ -16,20 +17,34 @@ The **Smart Plant Monitoring System** is a MERN stack web application designed t
   - Visualize growth and health trends
 - 🪴 **Manage Plants**
   - Add, view, update, and delete plant profiles
+  - 
+-🤖 AI Features
+
+🌱 Plant Disease Detection – Upload a plant leaf image to classify diseases using a pre-trained CNN model (plant_disease_prediction_model.h5).
+
+📊 Top-3 Predictions – Displays the top 3 most likely diseases with confidence scores.
+
+🔎 Full Probability Distribution – Provides class-wise probabilities for detailed debugging and analysis.
+
+🖼️ Interactive UI – Streamlit-powered interface for easy image upload, classification, and visualization.
 
 ---
+| Technology              | Role                                              |
+| ----------------------- | ------------------------------------------------- |
+| **MongoDB**             | Database                                          |
+| **Express.js**          | Backend Framework                                 |
+| **React.js**            | Frontend Library                                  |
+| **Node.js**             | Server Environment                                |
+| **Mongoose**            | MongoDB ODM                                       |
+| **JWT & Bcrypt.js**     | Authentication & Security                         |
+| **CSS (Glassmorphism)** | Frontend Styling                                  |
+| **Python**              | AI/ML Integration                                 |
+| **Streamlit**           | Plant Disease Detection UI                        |
+| **TensorFlow / Keras**  | Deep Learning Model (Leaf Disease Classification) |
+| **Pandas**              | Data Processing                                   |
+| **Matplotlib**          | Visualization of Predictions                      |
 
-## 🛠️ Tech Stack
 
-| Technology | Role |
-|------------|------|
-| **MongoDB** | Database |
-| **Express.js** | Backend Framework |
-| **React.js** | Frontend Library |
-| **Node.js** | Server Environment |
-| **Mongoose** | MongoDB ODM |
-| **JWT & Bcrypt.js** | Authentication & Security |
-| **CSS** | Styling (Glassmorphism with background images) |
 
 ---
 ## 📸 Screenshots
@@ -42,6 +57,7 @@ The **Smart Plant Monitoring System** is a MERN stack web application designed t
 
 ![Glassmorphic UI](Screenshot%20(144).png)  
 *Login / Register with Glassmorphism*
+![
 
 
 ## 🔧 Installation
