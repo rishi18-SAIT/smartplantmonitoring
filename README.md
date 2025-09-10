@@ -76,3 +76,8 @@ npm install
 # Install frontend dependencies
 cd ../frontend
 npm install
+
+#Install streamlit
+.\venv\Scripts\activate
+python -m streamlit run app.py
+
