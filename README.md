@@ -57,8 +57,8 @@ It helps users monitor and manage plants in real time, receive alerts, and detec
 
 ![Glassmorphic UI](Screenshot%20(144).png)  
 *Login / Register with Glassmorphism*
-![
-
+![AI feature-Plant Disease Classification](Screenshot%20(161).png)
+*Disease Classify
 
 ## 🔧 Installation
 
