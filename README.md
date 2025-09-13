@@ -1,6 +1,6 @@
-# 🌿 Smart Plant Monitoring System
+# 🌿  AgriLeaf Guard- Smart Plant Monitoring and Disease Detection System
 
-The **Smart Plant Monitoring System** is a MERN stack web application designed to help users monitor and manage their plants effectively with enhanced ai features 
+The **AgriLeaf Guard** is a MERN stack web application designed to help users monitor and manage their plants effectively with enhanced ai features 
 It helps users monitor and manage plants in real time, receive alerts, and detect plant diseases from leaf images.
 
 ---
