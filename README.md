@@ -49,15 +49,15 @@ It helps users monitor and manage plants in real time, receive alerts, and detec
 ---
 ## 📸 Screenshots
 
-![Dashboard](Screenshot%20(138).png)  
-*Plant Dashboard*
+![Dashboard](Screenshot%20(164).png)  
+* HomePage*
 
-![Real-time Monitor](Screenshot%20(139).png)  
+![Real-time Monitor](Screenshot%20(165).png)  
 *Real-time Monitoring*
 
-![Glassmorphic UI](Screenshot%20(144).png)  
+![Glassmorphic UI](Screenshot%20(166).png)  
 *Login / Register with Glassmorphism*
-![AI feature-Plant Disease Classification](Screenshot%20(161).png)
+![AI feature-Plant Disease Classification](Screenshot%20(163).png)
 *Disease Classify
 
 ## 🔧 Installation
