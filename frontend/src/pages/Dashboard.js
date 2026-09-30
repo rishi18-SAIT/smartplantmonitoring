@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { getPlants, addPlant } from '../api';
+import React, { useState, useEffect } from 'react';
+import api from '../api/axiosConfig'; // Use the correct, configured API instance
 
 const Dashboard = () => {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Expanded form data to match your new design
   const [formData, setFormData] = useState({
     name: '',
     location: '',
@@ -13,20 +14,23 @@ const Dashboard = () => {
     currentMoisture: '',
     wateringFrequency: '',
     lastWatered: '',
-    alertEnabled: true
+    alertEnabled: true,
   });
 
+  // Fetch existing plants from the secure backend API
   useEffect(() => {
-    getPlants()
-      .then(res => {
+    const fetchPlants = async () => {
+      try {
+        const res = await api.get('/plants');
         setPlants(res.data);
-        setLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error('Error fetching plants:', err);
         setError('Failed to load plants.');
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchPlants();
   }, []);
 
   const handleChange = e => {
@@ -40,8 +44,19 @@ const Dashboard = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await addPlant(formData);
+      // Prepare the data payload, ensuring correct data types for the backend
+      const payload = {
+        ...formData,
+        moistureThreshold: Number(formData.moistureThreshold),
+        currentMoisture: Number(formData.currentMoisture),
+        wateringFrequency: Number(formData.wateringFrequency),
+        lastWatered: formData.lastWatered || new Date().toISOString(), // Fallback to current time
+      };
+      
+      const res = await api.post('/plants', payload);
       setPlants(prev => [...prev, res.data]);
+
+      // Reset the form to its initial state
       setFormData({
         name: '',
         location: '',
@@ -49,20 +64,20 @@ const Dashboard = () => {
         currentMoisture: '',
         wateringFrequency: '',
         lastWatered: '',
-        alertEnabled: true
+        alertEnabled: true,
       });
     } catch (err) {
       console.error('Error adding plant:', err);
-      alert('Failed to add plant');
+      alert('Failed to add plant. Please check the fields and try again.');
     }
   };
 
-  if (loading) return <p style={{ textAlign: 'center' }}>Loading plants...</p>;
-  if (error) return <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>;
+  if (loading) return <div className="page-content"><p style={{ textAlign: 'center' }}>Loading plants...</p></div>;
+  if (error) return <div className="page-content"><p style={{ textAlign: 'center', color: 'red' }}>{error}</p></div>;
 
   return (
-    <div className="App">
-      <div className="overlay">
+    <div className="page-content">
+      <div className="overlay" style={{ marginBottom: '2rem' }}>
         <h2>🌿 Smart Plant Dashboard</h2>
 
         <form onSubmit={handleSubmit}>
@@ -110,7 +125,7 @@ const Dashboard = () => {
             value={formData.lastWatered}
             onChange={handleChange}
           />
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', justifyContent: 'center' }}>
             <input
               type="checkbox"
               name="alertEnabled"
@@ -121,13 +136,15 @@ const Dashboard = () => {
           </label>
 
           <button type="submit">➕ Add Plant</button>
+          <button onClick={() => window.location.href = "http://localhost:8501"}>
+  Open Plant Disease Detector
+</button>
+
         </form>
       </div>
 
-      {/* Plant Cards */}
-      {plants.length === 0 ? (
-        <p style={{ marginTop: '2rem', color: 'white' }}>No plant data available.</p>
-      ) : (
+      {/* Display Existing Plant Cards */}
+      {plants.length > 0 && (
         <div className="plant-cards-container">
           {plants.map((plant) => (
             <div key={plant._id} className="plant-card">
@@ -149,3 +166,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

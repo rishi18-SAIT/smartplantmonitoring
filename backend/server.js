@@ -24,7 +24,39 @@ mongoose.connect(process.env.MONGO_URI)
 
 // ✅ Routes
 const plantRoutes = require('./routes/plantRoutes');
+const authRoutes = require('./routes/authRoutes');
+const emailRoutes = require('./routes/emailRoutes');
+const fertilizerRoutes = require('./routes/fertilizerRoutes');
+const growthRoutes = require("./routes/growthRoutes");
+const cropRoutes = require("./routes/cropRoutes");
+const chatRoutes = require("./routes/chatRoutes");
+const pestRoutes = require("./routes/pestRoutes");
+
+
+
+
+
 app.use('/api/plants', plantRoutes);
+app.use('/api/auth', authRoutes); 
+app.use('/api/email', emailRoutes);
+app.use('/api', fertilizerRoutes); 
+app.use('/api', growthRoutes);
+app.use('/api', cropRoutes);
+app.use("/api", chatRoutes);
+app.use("/api", pestRoutes);
+
+const axios = require("axios");
+
+app.post("/api/crop-recommend-ml", async (req, res) => {
+  try {
+    const mlRes = await axios.post("http://localhost:8000/predict-crop", req.body);
+    res.json(mlRes.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "ML service error" });
+  }
+});
+
 
 // ✅ Health check
 app.get('/', (req, res) => {

@@ -1,14 +1,54 @@
 const mongoose = require('mongoose');
 
 const plantSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // Name of the plant
-  location: { type: String, required: true }, // Location of the plant
-  moistureThreshold: { type: Number, required: true }, // Moisture threshold for alerts
-  currentMoisture: { type: Number, required: true }, // Current moisture level
-  wateringFrequency: { type: Number, required: true }, // How often the plant should be watered (in days)
-  lastWatered: { type: Date, required: true }, // Date when the plant was last watered
-  alertEnabled: { type: Boolean, default: true }, // Flag to check if alerts are enabled
-  imageUrl: { type: String }  // URL for plant's image (if any)
+  // ✨ Added a reference to the User model. This is crucial for security.
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // This creates a link to the 'User' collection
+    required: true,
+    index: true, // Improves performance when finding a user's plants
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true, // Removes leading/trailing whitespace
+  },
+  location: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  moistureThreshold: {
+    type: Number,
+    required: true,
+    min: 0,   // Validation: Ensures the value is between 0 and 100
+    max: 100,
+    default: 30, // A sensible default value
+  },
+  currentMoisture: {
+    type: Number,
+    default: 70, // A sensible starting default
+  },
+  wateringFrequency: {
+    type: Number,
+    required: true,
+    min: 1, // Validation: Must be at least 1 day
+  },
+  lastWatered: {
+    type: Date,
+    default: Date.now, // Defaults to the moment the plant is created
+  },
+  alertEnabled: {
+    type: Boolean,
+    default: true,
+  },
+  imageUrl: {
+    type: String,
+    trim: true,
+  },
+}, {
+  // ✨ Automatically adds `createdAt` and `updatedAt` fields
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Plant', plantSchema);

@@ -1,55 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import '../assets/alert.css'; // Import the CSS file
+import React, { useEffect, useState, useRef } from 'react'; // 1. Import useRef
+import '../assets/alert.css';
+import api from '../api/axiosConfig'; // Use the secure API instance
 
 const Alerts = () => {
   const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const effectRan = useRef(false); // 2. Create a ref to track if the effect has run
+
+  // Function to fetch plants and generate alerts
+  const fetchAndGenerateAlerts = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get('/plants');
+      const fetchedPlants = response.data;
+      // The 'plants' state was removed as it was unused.
+
+      // Get settings from localStorage
+      const defaultThreshold = parseInt(localStorage.getItem('defaultThreshold')) || 30;
+      const emailAlertsEnabled = JSON.parse(localStorage.getItem('emailAlertsEnabled'));
+
+      const generatedAlerts = fetchedPlants.map((plant) => {
+        const currentMoisture = plant.currentMoisture || Math.floor(Math.random() * 100);
+        const plantThreshold = plant.moistureThreshold || defaultThreshold;
+        const type = currentMoisture < plantThreshold ? 'warning' : 'info';
+        const time = new Date().toLocaleTimeString();
+
+        const alert = {
+          plantId: plant._id,
+          plantName: plant.name,
+          threshold: plantThreshold,
+          currentMoisture,
+          type,
+          time,
+        };
+
+        if (type === 'warning' && emailAlertsEnabled) {
+          api.post('/email/alert', { plantName: plant.name, currentMoisture, threshold: plantThreshold })
+            .then(() => console.log(`✅ Alert email for ${plant.name} sent.`))
+            .catch(err => console.error(`❌ Failed to send alert email for ${plant.name}:`, err));
+        }
+        return alert;
+      });
+
+      setAlerts(generatedAlerts);
+    } catch (err) {
+      console.error("Failed to fetch plants:", err);
+      setError('Could not load plant data for alerts.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const storedPlants = JSON.parse(localStorage.getItem('plants')) || [];
+    // 3. This check prevents the effect from running twice in development
+    if (effectRan.current === false) {
+      fetchAndGenerateAlerts();
 
-    // Fetch saved settings
-    const defaultThreshold = parseInt(localStorage.getItem('defaultThreshold')) || 30;
-    const emailAlertsEnabled = JSON.parse(localStorage.getItem('emailAlertsEnabled'));
-
-    const generatedAlerts = storedPlants.map((plant) => {
-      const currentMoisture = Math.floor(Math.random() * 100); // Simulate sensor reading
-      const plantThreshold = plant.moistureThreshold || defaultThreshold;
-      const type = currentMoisture < plantThreshold ? 'warning' : 'info';
-      const time = new Date().toLocaleTimeString();
-
-      const alert = {
-        plantName: plant.name,
-        location: plant.location,
-        threshold: plantThreshold,
-        currentMoisture,
-        type,
-        time
+      // The cleanup function sets the ref to true after the first run
+      return () => {
+        effectRan.current = true;
       };
-
-      // Send email if threshold breached and setting is enabled
-      if (type === 'warning' && emailAlertsEnabled) {
-        fetch('http://localhost:5000/send-alert-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(alert)
-        })
-        .then(response => {
-          if (!response.ok) {
-            console.error('❌ Failed to send alert email');
-          } else {
-            console.log('✅ Alert email sent');
-          }
-        })
-        .catch(err => console.error('❌ Email error:', err));
-      }
-
-      return alert;
-    });
-
-    setAlerts(generatedAlerts);
+    }
   }, []);
+
+  // Function to delete a plant
+  const handleDeletePlant = async (plantIdToDelete) => {
+    if (window.confirm('Are you sure you want to delete this plant? This will remove it permanently.')) {
+      try {
+        await api.delete(`/plants/${plantIdToDelete}`);
+        // Refresh the alerts list after deleting the plant
+        fetchAndGenerateAlerts();
+      } catch (err) {
+        console.error("Failed to delete plant:", err);
+        setError('Could not delete the plant. Please try again.');
+      }
+    }
+  };
+  
+  if (loading) return <div className="page-content"><p>Loading alerts...</p></div>;
+  if (error) return <div className="page-content"><p style={{ color: 'red' }}>{error}</p></div>;
 
   return (
     <div className="page-content">
@@ -60,10 +90,16 @@ const Alerts = () => {
         <ul className="alert-list">
           {alerts.map((alert, idx) => (
             <li key={idx} className={`alert ${alert.type}`}>
-              🌿 <strong>{alert.plantName}</strong> @ {alert.location}<br />
+              🌿 <strong>{alert.plantName}</strong> <br />
               💧 Current Moisture: {alert.currentMoisture}%<br />
               ⚠ Threshold: {alert.threshold}%<br />
               🕒 {alert.time}
+              <button
+                className="delete-alert-btn"
+                onClick={() => handleDeletePlant(alert.plantId)}
+              >
+                Delete Plant
+              </button>
             </li>
           ))}
         </ul>
@@ -73,3 +109,4 @@ const Alerts = () => {
 };
 
 export default Alerts;
+
