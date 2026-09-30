@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 
 export default function DiseaseScanner() {
 
+  const aiUrl = process.env.REACT_APP_AI_URL || "http://localhost:8501";
+
   // Automatically open Streamlit app when this page loads
   useEffect(() => {
-    window.open("http://localhost:8501", "_blank");
-  }, []);
+    window.open(aiUrl, "_blank");
+  }, [aiUrl]);
 
   return (
     <div style={{ padding: "30px" }}>
@@ -14,7 +16,7 @@ export default function DiseaseScanner() {
 
       {/* Button to Open Disease Detector */}
       <button
-        onClick={() => window.open("http://localhost:8501", "_blank")}
+        onClick={() => window.open(aiUrl, "_blank")}
         style={{
           padding: "12px 20px",
           borderRadius: "10px",
@@ -31,7 +33,7 @@ export default function DiseaseScanner() {
 
       {/* Button to Open Fertilizer Advisor */}
       <button
-        onClick={() => window.open("http://localhost:3000/fertilizer-advisor", "_blank")}
+        onClick={() => window.open("/fertilizer-advisor", "_blank")}
         style={{
           padding: "12px 20px",
           borderRadius: "10px",

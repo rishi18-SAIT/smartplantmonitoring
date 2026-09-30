@@ -17,7 +17,8 @@ const Login = () => {
       navigate('/dashboard'); // Redirect to a protected page
       window.location.reload(); // Optional: force a reload to update app state
     } catch (err) {
-      setError('Failed to log in. Please check your credentials.');
+      const msg = err.response?.data?.msg || err.response?.data?.error || err.message || 'Failed to log in. Please check your credentials.';
+      setError(msg);
       console.error(err);
     }
   };

@@ -27,7 +27,7 @@ const Register = () => {
 
     } catch (err) {
       // Handle errors from the backend (e.g., user already exists)
-      const errorMessage = err.response?.data?.msg || 'Registration failed. Please try again.';
+      const errorMessage = err.response?.data?.msg || err.response?.data?.error || err.message || 'Registration failed. Please try again.';
       setError(errorMessage);
       console.error(err);
     }

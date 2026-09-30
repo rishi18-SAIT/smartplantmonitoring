@@ -136,9 +136,12 @@ const Dashboard = () => {
           </label>
 
           <button type="submit">➕ Add Plant</button>
-          <button onClick={() => window.location.href = "http://localhost:8501"}>
-  Open Plant Disease Detector
-</button>
+          <button 
+            type="button" 
+            onClick={() => window.open(process.env.REACT_APP_AI_URL || "http://localhost:8501", "_blank")}
+          >
+            Open Plant Disease Detector
+          </button>
 
         </form>
       </div>

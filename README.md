@@ -2,9 +2,11 @@
 
 [![Live Demo](https://img.shields.io/badge/Frontend-Vercel-black?style=for-the-badge&logo=vercel)](https://smartplantmonitoring-zeta.vercel.app/)
 [![Backend API](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render)](https://smart-plant-backend-237h.onrender.com/)
+[![AI Service](https://img.shields.io/badge/AI_Classifier-Render-FF4B4B?style=for-the-badge&logo=streamlit)](https://dashboard.render.com/)
 
 * **🌐 Live Web App**: [https://smartplantmonitoring-zeta.vercel.app](https://smartplantmonitoring-zeta.vercel.app/)
 * **🚀 Live API**: [https://smart-plant-backend-237h.onrender.com](https://smart-plant-backend-237h.onrender.com/)
+* **🤖 AI Service**: *Deploy on Render (See DEPLOYMENT_GUIDE.md)*
 
 ---
 

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./Chatbot.css";
 import { FaPaperPlane, FaLeaf, FaMicrophone, FaImage, FaTrash, FaTimes, FaRobot } from "react-icons/fa";
+import { API_BASE_URL } from "../api/axiosConfig";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
@@ -58,8 +59,7 @@ export default function Chatbot() {
     // Simulate bot response delay
     setTimeout(async () => {
       try {
-        const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
-        const res = await fetch(`${API_BASE}/chat`, {
+        const res = await fetch(`${API_BASE_URL}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 

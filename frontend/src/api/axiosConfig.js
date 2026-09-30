@@ -2,7 +2,8 @@
 import axios from "axios";
 import authService from "./authService";
 
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+const rawBase = (process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api").trim().replace(/\/+$/, '');
+export const API_BASE_URL = rawBase.endsWith('/api') ? rawBase : `${rawBase}/api`;
 
 // Create Axios instance
 const instance = axios.create({

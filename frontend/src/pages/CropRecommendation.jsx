@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./cropRecommendation.css";
+import { API_BASE_URL } from "../api/axiosConfig";
 
 export default function CropRecommendation() {
   const [form, setForm] = useState({
@@ -19,8 +20,7 @@ export default function CropRecommendation() {
   };
 
   const handleSubmit = async () => {
-    const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
-    const res = await fetch(`${API_BASE}/crop-recommend-ml`, {
+    const res = await fetch(`${API_BASE_URL}/crop-recommend-ml`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)

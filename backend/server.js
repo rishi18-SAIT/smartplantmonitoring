@@ -36,21 +36,22 @@ const pestRoutes = require("./routes/pestRoutes");
 
 
 
-app.use('/api/plants', plantRoutes);
-app.use('/api/auth', authRoutes); 
-app.use('/api/email', emailRoutes);
-app.use('/api', fertilizerRoutes); 
-app.use('/api', growthRoutes);
-app.use('/api', cropRoutes);
-app.use("/api", chatRoutes);
-app.use("/api", pestRoutes);
+app.use(['/api/plants', '/plants'], plantRoutes);
+app.use(['/api/auth', '/auth'], authRoutes); 
+app.use(['/api/email', '/email'], emailRoutes);
+app.use(['/api', '/'], fertilizerRoutes); 
+app.use(['/api', '/'], growthRoutes);
+app.use(['/api', '/'], cropRoutes);
+app.use(['/api', '/'], chatRoutes);
+app.use(['/api', '/'], pestRoutes);
 
 const axios = require("axios");
 
-app.post("/api/crop-recommend-ml", async (req, res) => {
+app.post(['/api/crop-recommend-ml', '/crop-recommend-ml'], async (req, res) => {
   try {
-    const mlUrl = process.env.ML_API_URL 
-      ? `${process.env.ML_API_URL.replace(/\/$/, '')}/predict-crop`
+    const rawMlUrl = process.env.ML_API_URL || process.env.ML_API_URI;
+    const mlUrl = rawMlUrl 
+      ? `${rawMlUrl.replace(/\/$/, '')}/predict-crop`
       : "http://localhost:8000/predict-crop";
     const mlRes = await axios.post(mlUrl, req.body);
     res.json(mlRes.data);

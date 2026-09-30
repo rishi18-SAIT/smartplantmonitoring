@@ -4,6 +4,7 @@ This guide provides step-by-step instructions to deploy the full-stack **Smart P
 * **Frontend (React)** ➔ **Vercel**
 * **Backend (Node.js/Express)** ➔ **Render**
 * **ML Service (FastAPI / Optional)** ➔ **Render**
+* **AI Disease Classifier (Streamlit / Optional)** ➔ **Render**
 * **Database (MongoDB Atlas)** ➔ Cloud
 
 ---
@@ -12,10 +13,11 @@ This guide provides step-by-step instructions to deploy the full-stack **Smart P
 1. [Architecture & Deployment Overview](#1-architecture--deployment-overview)
 2. [Step 1: Deploy Backend to Render](#step-1-deploy-backend-to-render)
 3. [Step 2: Deploy ML Service to Render (Optional)](#step-2-deploy-ml-service-to-render-optional)
-4. [Step 3: Deploy Frontend to Vercel](#step-3-deploy-frontend-to-vercel)
-5. [Step 4: Environment Variables Reference](#step-4-environment-variables-reference)
-6. [Step 5: Verifying & Testing Deployment](#step-5-verifying--testing-deployment)
-7. [Troubleshooting & Common Pitfalls](#troubleshooting--common-pitfalls)
+4. [Step 3: Deploy AI Disease Classifier to Render (Optional)](#step-3-deploy-ai-disease-classifier-to-render-optional)
+5. [Step 4: Deploy Frontend to Vercel](#step-4-deploy-frontend-to-vercel)
+6. [Step 5: Environment Variables Reference](#step-5-environment-variables-reference)
+7. [Step 6: Verifying & Testing Deployment](#step-6-verifying--testing-deployment)
+8. [Troubleshooting & Common Pitfalls](#troubleshooting--common-pitfalls)
 
 ---
 
@@ -97,7 +99,25 @@ If you are using the dedicated Python FastAPI Crop Recommendation service (`ml/`
 
 ---
 
-## Step 3: Deploy Frontend to Vercel
+## Step 3: Deploy AI Disease Classifier to Render (Optional)
+
+If you want to host the Streamlit UI for Plant Disease Classification (`ai/`):
+
+1. Go to [Render Dashboard](https://dashboard.render.com/) and click **"New +"** ➔ **"Web Service"**.
+2. Select your repository `smartplantmonitoring`.
+3. Configure settings:
+   * **Name**: `smart-plant-ai` (or similar)
+   * **Root Directory**: `ai` *(⚠️ Critical)*
+   * **Runtime**: `Python 3`
+   * **Build Command**: `pip install -r requirements.txt`
+   * **Start Command**: `streamlit run app.py --server.port $PORT`
+   * **Instance Type**: `Free`
+4. Click **"Create Web Service"**.
+5. Once deployed, you will get a URL (e.g., `https://smart-plant-ai.onrender.com`). You can use this URL to directly access the AI classifier!
+
+---
+
+## Step 4: Deploy Frontend to Vercel
 
 1. Go to [Vercel Dashboard](https://vercel.com/dashboard) and log in with GitHub.
 2. Click **"Add New..."** ➔ **"Project"**.
@@ -113,13 +133,14 @@ If you are using the dedicated Python FastAPI Crop Recommendation service (`ml/`
 | Key | Value | Note |
 | :--- | :--- | :--- |
 | `REACT_APP_API_BASE_URL` | `https://your-backend-name.onrender.com/api` | Replace with your actual Render backend URL from Step 1, ending in `/api` |
+| `REACT_APP_AI_URL` | `https://smart-plant-ai.onrender.com` | *(Optional)* URL of deployed AI Streamlit disease classifier |
 
 6. Click **"Deploy"**.
 7. Vercel will build and deploy your React app in ~1-2 minutes and give you a public URL (e.g., `https://smartplantmonitoring.vercel.app`).
 
 ---
 
-## Step 4: Environment Variables Reference
+## Step 5: Environment Variables Reference
 
 ### Backend (`backend/.env` on Render)
 ```env
@@ -139,11 +160,12 @@ ML_API_URL=https://smart-plant-ml.onrender.com
 ### Frontend (on Vercel)
 ```env
 REACT_APP_API_BASE_URL=https://smart-plant-backend.onrender.com/api
+REACT_APP_AI_URL=https://smart-plant-ai.onrender.com
 ```
 
 ---
 
-## Step 5: Verifying & Testing Deployment
+## Step 6: Verifying & Testing Deployment
 
 1. **Backend Health Check**:
    * Visit `https://your-backend-name.onrender.com/` in your browser.

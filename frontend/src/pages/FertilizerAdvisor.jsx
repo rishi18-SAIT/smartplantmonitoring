@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./fertilizerAdvisor.css";
+import { API_BASE_URL } from "../api/axiosConfig";
 
 export default function FertilizerAdvisor() {
   const [form, setForm] = useState({
@@ -18,8 +19,7 @@ export default function FertilizerAdvisor() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
-      const res = await fetch(`${API_BASE}/fertilizer-ai`, {
+      const res = await fetch(`${API_BASE_URL}/fertilizer-ai`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)
