@@ -12,12 +12,40 @@ working_dir = os.path.dirname(os.path.abspath(__file__))
 model_path = f"{working_dir}/trained_model/plant_disease_prediction_model.h5"
 class_indices_path = f"{working_dir}/trained_model/class_indices.json"
 
-# ✅ Load model safely (skip compile to avoid errors)
-model = tf.keras.models.load_model(model_path, compile=False)
+@st.cache_resource
+def load_trained_model():
+    """Load model with auto-download support and caching"""
+    if not os.path.exists(model_path):
+        download_url = os.environ.get("MODEL_DOWNLOAD_URL") or os.environ.get("PLANT_MODEL_URL")
+        if download_url:
+            try:
+                os.makedirs(os.path.dirname(model_path), exist_ok=True)
+                with st.spinner("⏳ Downloading trained model weights (~150MB)... This runs only once."):
+                    import urllib.request
+                    urllib.request.urlretrieve(download_url, model_path)
+            except Exception as e:
+                st.error(f"Failed to download model: {e}")
+                return None
+
+    if os.path.exists(model_path):
+        try:
+            return tf.keras.models.load_model(model_path, compile=False)
+        except Exception as e:
+            st.error(f"Failed to load model file: {e}")
+            return None
+    return None
+
+# Load model safely
+model = load_trained_model()
 
 # Load class indices
-with open(class_indices_path, "r") as f:
-    class_indices = json.load(f)
+class_indices = {}
+if os.path.exists(class_indices_path):
+    with open(class_indices_path, "r") as f:
+        class_indices = json.load(f)
+elif os.path.exists(f"{working_dir}/class_indices.json"):
+    with open(f"{working_dir}/class_indices.json", "r") as f:
+        class_indices = json.load(f)
 
 # Image preprocessing
 def load_and_preprocess_image(image, target_size=(224, 224)):
@@ -48,6 +76,22 @@ def predict_image_class(model, image, class_indices, top_k=3):
 
 # Streamlit UI
 st.title("🌱 Plant Disease Classifier")
+
+if model is None:
+    st.warning("⚠️ Model weights file `plant_disease_prediction_model.h5` was not found in the deployment.")
+    st.info("""
+    ### Why did this happen?
+    TensorFlow `.h5` model files are large binary weights that were not committed to GitHub (often due to GitHub's 100MB limit).
+
+    ### How to enable it on Render:
+    1. Upload `plant_disease_prediction_model.h5` to **Google Drive**, **Hugging Face**, **Dropbox**, or **GitHub Releases**.
+    2. In your Render Dashboard ➔ select your AI service ➔ **Environment** tab.
+    3. Add an Environment Variable:
+       * **Key**: `MODEL_DOWNLOAD_URL`
+       * **Value**: `<Direct Download URL>`
+    4. Save changes. The app will automatically download the model on startup!
+    """)
+    st.stop()
 
 uploaded_image = st.file_uploader("Upload a plant leaf image...", type=["jpg", "jpeg", "png"])
 
