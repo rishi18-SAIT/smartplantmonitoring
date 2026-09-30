@@ -49,10 +49,13 @@ const axios = require("axios");
 
 app.post("/api/crop-recommend-ml", async (req, res) => {
   try {
-    const mlRes = await axios.post("http://localhost:8000/predict-crop", req.body);
+    const mlUrl = process.env.ML_API_URL 
+      ? `${process.env.ML_API_URL.replace(/\/$/, '')}/predict-crop`
+      : "http://localhost:8000/predict-crop";
+    const mlRes = await axios.post(mlUrl, req.body);
     res.json(mlRes.data);
   } catch (error) {
-    console.error(error);
+    console.error("ML service error:", error.message);
     res.status(500).json({ error: "ML service error" });
   }
 });

@@ -2,9 +2,11 @@
 import axios from "axios";
 import authService from "./authService";
 
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+
 // Create Axios instance
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api", // 🔑 change if deployed
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -24,9 +26,6 @@ instance.interceptors.request.use(
     // 3️⃣ Attach token if available
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("✅ Attached token:", token); // debug log
-    } else {
-      console.warn("⚠️ No token found. Requests may return 401 Unauthorized.");
     }
 
     return config;
@@ -40,8 +39,6 @@ instance.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       console.error("❌ Unauthorized! Token may be invalid or expired.");
-      // Optional: redirect to login page
-      // window.location.href = "/login";
     }
     return Promise.reject(error);
   }

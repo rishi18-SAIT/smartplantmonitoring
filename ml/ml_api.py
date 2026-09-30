@@ -1,11 +1,23 @@
+import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import numpy as np
 
-app = FastAPI()
+app = FastAPI(title="Smart Plant Monitoring ML Service")
 
-model = joblib.load("models/crop_rf_model.joblib")
+# Allow CORS for backend and direct frontend access
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+model_path = os.path.join(os.path.dirname(__file__), "models", "crop_rf_model.joblib")
+model = joblib.load(model_path)
 
 class CropRequest(BaseModel):
     N: float
@@ -15,6 +27,10 @@ class CropRequest(BaseModel):
     humidity: float
     ph: float
     rainfall: float
+
+@app.get("/")
+def root():
+    return {"status": "running", "service": "Crop Recommendation ML Service"}
 
 @app.post("/predict-crop")
 def predict_crop(data: CropRequest):

@@ -18,7 +18,8 @@ export default function FertilizerAdvisor() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/fertilizer-ai", {
+      const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+      const res = await fetch(`${API_BASE}/fertilizer-ai`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)

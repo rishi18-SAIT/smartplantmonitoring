@@ -19,7 +19,8 @@ export default function CropRecommendation() {
   };
 
   const handleSubmit = async () => {
-    const res = await fetch("http://localhost:5000/api/crop-recommend-ml", {
+    const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+    const res = await fetch(`${API_BASE}/crop-recommend-ml`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form)

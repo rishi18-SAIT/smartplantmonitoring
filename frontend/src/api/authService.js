@@ -1,7 +1,8 @@
 // src/api/authService.js
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/auth/'; // Backend auth route
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api';
+const API_URL = `${API_BASE}/auth/`; // Backend auth route
 
 // --- Register user ---
 const register = async (name, email, password) => {

@@ -18,7 +18,8 @@ export default function GrowthPredictor() {
   const handlePredict = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/growth-predict", {
+      const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+      const res = await fetch(`${API_BASE}/growth-predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form)

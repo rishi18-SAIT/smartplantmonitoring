@@ -58,7 +58,8 @@ export default function Chatbot() {
     // Simulate bot response delay
     setTimeout(async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/chat", {
+        const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+        const res = await fetch(`${API_BASE}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ 
